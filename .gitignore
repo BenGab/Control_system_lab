@@ -1,2 +1,5 @@
 Document/build/*
 Document/images/*.pdf
+Scripts/slprj/
+*.xml
+*.slxc
