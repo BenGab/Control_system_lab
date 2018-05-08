@@ -156,5 +156,46 @@ Az ugrásválasz:
 \includegraphics[scale=.30]{ZNSKUPI}
 \caption{A tervezett PI szabályozóval, a rendszer ugrásválasza}
 \end{figure}
-A rendszer stabil, 1-re áll be a szabályozó, előtte van túllövése 1,3 majd 1,1 környékén. Végül 150s-nél beáll a rendszer.
+A rendszer stabil, 1-re áll be a szabályozó, előtte van túllövése 1,3 majd 1,1 környékén. Végül 150-nél beáll a rendszer.
+
+\subsection{PID szabályozó tervezés Kessler módszerrel}
+Adott átviteli függvény:
+\[W_p(s)=\frac{1}{(1+12.4s)(1+5s)(1+1.3s)}e^{-T_us}\]
+ahol $T_us=0$
+A rendszer nem tartalmaz holtidőt, mivel a $T_U=0$, illetve nem tartalmaz szabad integrátort (nincs s-el való szorzás a pólusok elején), így a modulusz kritériumot fogom használni. A rendszer Matlab-ba betöltöttem. PID szabályozó esetén a szabályozandó rendszernek \[W_p(s)=\frac{K_P}{(1+1s*T_1)(1+s*T_2)(1+s*T_3)}\] alakúnak kell lennie. A rendszer jelenleg ilyen alakúnak néz ki, így nem kell alkalmazni a kis időállandó tételét.\begin{center}
+\begin{tabular}{| c c c |}
+\hline $T_{r1}$ & $T_1$ & 12.4 \\
+\hline $T_{r2}$ & $T_2$ & 5 \\
+\hline $T_{\sum}$ & $T_3$ & 1.3 \\
+\hline & $K_p$ & 1 \\
+\hline
+\end{tabular}
+\end{center}
+A szükséges paraméterek a \[K_r=\frac{1}{2*K_p*T_\sum}=\frac{1}{2*1*1.3}=0.3846\] 
+A PID szabályozó átviteli függvénye: \[\frac{K_r}{s}*(1+sT_{r1})(1+sT_{r2})\]
+A Matlab által kiszámolt PID szabályozó átviteli függvény: \[W_{PID}(s)=\frac{23.85s^2+4.769s+0.3846}{s}\]
+Ezt Simulink alatt nem lehet felvinni, mint átviteli függvény, ezért ki kell számolni külön a P I D tagok átviteli függvényét, ami:
+\[(1+s*T_1)*(1+sT_2)=62s^2+17.4s+1\]
+Ebből a tagok külön:
+\begin{center}
+\begin{tabular}{|c c c|}
+\hline P & $\frac{K_r}{s}*17.4*s$ & 6.692 \\
+\hline I & $\frac{K_r}{s}*1$ & $\frac{0.3846}{s}$\\
+\hline D & $\frac{K_r}{s}*62*s^2$ & $23.85s$\\
+\hline
+\end{tabular}
+\end{center}
+A Simulink segítségével összerakott rendszer ugrásválasza
+\begin{figure}[H]
+\centering
+\includegraphics[scale=.70]{KESSLER10S}
+\caption{A rendszer ugrásválasza $10s$ szimulációs idővel}
+\end{figure}
+A rendszer nem tűnik stabilnak, azonban gyanú lehet egy túllövés, ezért a szimulációs időt megemeltem.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=.70]{KESSLER100S}
+\caption{A rendszer ugrásválasza $100s$ szimulációs idővel}
+\end{figure}
+A rendszer stabil, ahogy az ábrán látható, hogy a rendszernek van $1.343s$ holtideje, amit egy, majd kb $16.864s$ múlva eléri a túllövés maximumát, ami a $18.207s$-nél történik. Majd $51.780s$ múlva $69.800s$-nél beáll 1-re, azaz az állandósult állapotra.
 \end{document}
