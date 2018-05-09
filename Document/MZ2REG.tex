@@ -198,4 +198,36 @@ A rendszer nem tűnik stabilnak, azonban gyanú lehet egy túllövés, ezért a 
 \caption{A rendszer ugrásválasza $100s$ szimulációs idővel}
 \end{figure}
 A rendszer stabil, ahogy az ábrán látható, hogy a rendszernek van $1.343s$ holtideje, amit egy, majd kb $16.864s$ múlva eléri a túllövés maximumát, ami a $18.207s$-nél történik. Majd $51.780s$ múlva $69.800s$-nél beáll 1-re, azaz az állandósult állapotra.
+\section{Klasszikus PID szabályozó tervezés}
+A szabályozandó szakasz: \[W_P(s)=\frac{1}{(1+12.4s)(1+5s)(1+1.3s)}\]
+A szabályozandó szakasz a szorzások elvégzése után, amivel dolgozni fogok:
+\[W_P(s)=\frac{1}{80.6s^3+84.62s^2+18.7s+1}\]
+Bármilyen szabályozó tervezésnek nekiállok, megnézem a rendszer ugrásválaszát:
+\begin{figure}[H]
+\centering
+\includegraphics[scale=.70]{WPLANTSTEPRESPONSE}
+\caption(A szabályozandó rendszer ugrásválasza)
+\end{figure}
+A rendszer stabil, kb $80s$-nél beáll 1 állandósult állapotba. Nincs túllövése, csak felfutási ideje. 
+\begin{figure}[H]
+\centering
+\includegraphics[scale=.70]{WPLANTMARGIN}
+\caption(A szabályozandó rendszer Bode diagramja)
+\end{figure}
+A Bode diagramon látható, hogy a Fázistartalék $\varphi_t=-180^\circ$ az erősítés pedig $25.4dB$
+\subsection{P szabályozó tervezés $\varphi_t=70^\circ$ fázistartalékra}
+A szabályozó tervezés első lépése, hogy egy $\frac{1}{1}$-es szabályzót hozok létre, amit sorba kötök a rendszerrel. Ezt elsőként nyitott körre hajtom végre. A kiértékelést numerikus módszerrel hajtom végre. A $70\circ$ tartalékot Matlab-ban eltároltam, majd a Bode diagramból eltároltam az amplitudókat, a fázisokat, és a $\omega$-kat. Ezek után kiszámoltam az abszolút távolságokat  $\varphi_t=70^\circ$-től az alábbi módon:
+$(180^\circ+phases)-70^\circ$ abszolút értéke, majd vettem ennek a listának a minimumát. A minimum indexű fázisból kinyertem az erősítési tényezőt $A_P=2.5808$. A P szabályozó $\frac{A_P}{1}$, melyet sorba kötve megkaptam a nyitott kör Bode diagramját:
+\begin{figure}[H]
+\centering
+\includegraphics[scale=.70]{WPLANTPIDOPENLOOPMARGIN}
+\caption(A P szabályozóra tervezett nyitott kör Bode diagramja)
+\end{figure}
+A diagram alapján látható, hogy a numerikusan módszerrel tervezett fázistartalék $72.6^\circ$ lett, ami annak köszönhető, hogy a Matlab bode függvénye az amplitúdó és fázisdiagramot diszkrét frekvenciaértékeken értékeli ki. A zárt rendszert létrehozásához egy hurok visszacsatoló ágat létrehozva a zárt köt ugrásválasza:
+\begin{figure}[H]
+\centering
+\includegraphics[scale=.70]{WPLANTPCLMR}
+\caption(A P szabályozóra tervezett zárt kör ugrásválasza)
+\end{figure}
+A rendszer továbbra is stabil, illetve egy túllövése 0.87 amplitudó környékén, majd beáll a 0.72 amplitudó környékén. 
 \end{document}
