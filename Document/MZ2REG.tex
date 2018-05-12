@@ -313,4 +313,18 @@ Lehet látni, hogy sikeresen elértük a fázistartalékot és 0.218 a vágási 
 \caption(A PID szabályozóra tervezett zárt kör ugrásválasza)
 \end{figure}
 Lehet látni, hogy rendszer stabil, egy nagyon minimális túllövése van és utána gyorsan beáll 1-re, ahol nem látok semmi hibajelet.
+\subsection{Rendszerek összehasonlítása}
+A tervezek rendszerek bode diagramja:
+\begin{figure}[H]
+\centering
+\includegraphics[width=180mm,height=140mm]{BODE_ALL}
+\caption(A rendszerek bode diagramja)
+\end{figure}
+A rendszerek ugrásválasza:
+ \begin{figure}[H]
+\centering
+\includegraphics[width=180mm,height=140mm]{STEP_ALL}
+\caption(A rendszerek bode diagramja)
+\end{figure}
+Az ugrásválaszok alapján látható, hogy leggyorsabb rendszer a PD szabályozó lenne, viszont a túllövése több is van és magas is. A legjobb rendszer ami viszonylag gyors és stabil is az a közelítő PID szabályozó, ami miatt ez lenne a legjobb választás.
 \end{document}

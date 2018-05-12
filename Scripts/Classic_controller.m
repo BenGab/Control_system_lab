@@ -139,3 +139,11 @@ margin(WO_PID)
 WCCP_PID = feedback(WO_PID, tf(1,1));
 figure('name', 'step response for closed PID loop')
 step(WCCP_PID, time)
+
+figure('name', 'All system')
+bode(WcP_v2, W_Closed_error_p, W_CL_PD, WC_PI, WCCP_PID)
+grid
+
+figure
+step(WcP_v2, W_Closed_error_p, W_CL_PD, WC_PI, WCCP_PID, time)
+grid
