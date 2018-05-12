@@ -229,5 +229,27 @@ A diagram alapján látható, hogy a numerikusan módszerrel tervezett fázistar
 \includegraphics[scale=.70]{WPLANTPCLMR}
 \caption(A P szabályozóra tervezett zárt kör ugrásválasza)
 \end{figure}
-A rendszer továbbra is stabil, illetve egy túllövése 0.87 amplitudó környékén, majd beáll a 0.72 amplitudó környékén. 
+A rendszer továbbra is stabil, illetve egy túllövése 0.87 amplitudó környékén, majd beáll a 0.72 amplitudó környékén.
+\subsection{P szabályozó tervezés előírt állandósult hibára $e=0.1$}
+Az állandósult hiba eléréséhez az erősítést kell felhasználni:
+\[e=1-\frac{K}{1+K}\Rightarrow K=\frac{1-e}{e}\]
+\[K_p*K_{Plant}=\frac{1-e}{e}\]
+\[K_p=\frac{1-e}{K_{Plant}*e}\]
+Az egyenletbe való helyettesítés után a $K=9$ az erősítés. A szabályozandó rendszer erősítése $K_{Plant}=1$, amelyet a Matlab dcgain függvényéből olvastam ki a szabályozandó rendszerhez. Így szabályozó erősítése $K_P=9$. A nyitott kör P szabályozós átviteli függvénye:
+\[W_P(s)=\frac{9}{80.6s^3+84.62s^2+18.7s+1}\]
+A nyitott kör Bode diagramja:
+\begin{figure}[H]
+\centering
+\includegraphics[scale=.70]{WOERRORMARGIN}
+\caption(A P szabályozóra tervezett nyitott kör Bode diagramja)
+\end{figure}
+A Bode diagramm alapján a nyitott kör fázistartaléka $\varphi_t=21.2$ 
+A rendszer ugrásválasza:
+\begin{figure}[H]
+\centering
+\includegraphics[scale=.70]{WCLOSEDERORSTEP}
+\caption(A P szabályozóra tervezett zárt kör ugrásválasza)
+\end{figure}
+A rendszer stabil, igaz vannak túllövései, de beáll 0.9-re, így látható is, hogy az állandósult az hiba $0,1$ lett.
+
 \end{document}
