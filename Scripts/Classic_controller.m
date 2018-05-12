@@ -1,7 +1,8 @@
 %%Plant
 time =  1:0.001:200; 
-num_plant = 1;
-den_plant = conv([12.4 1], conv([5 1],[1.3 1]));
+A = 1; T1=12.4; T2=5; T3 = 1.3;
+num_plant = A;
+den_plant = conv([T1 1], conv([T2 1],[T3 1]));
 W_PLANT = tf(num_plant, den_plant)
 figure('Name','Step response for W_PLANT');
 step(W_PLANT)
@@ -52,5 +53,35 @@ step(W_Closed_error_p,time);
 hold
 oo = ones(1, length(time));
 plot(t,1.1*oo,'r',t,0.9*oo,'r') 
-
 hold off
+
+%PD controller for cutting frequent
+wc_freq = 0.8;
+TD_p_pd = T2/1.1;
+TC_p_pd = 0.1*TD_p_pd;
+num_p_pd = [TD_p_pd+TC_p_pd 1];
+den_p_pd = [TC_p_pd 1];
+W_p_pd = tf(num_p_pd, den_p_pd)
+WO_p_pd = series(W_p_pd, W_PLANT)
+
+[mag, phase] = bode(WO_p_pd, wc_freq);
+Ap_p_pd = 1/mag
+
+num_pd = Ap_p_pd * num_p_pd;
+den_pd = den_p_pd;
+W_pd = tf(num_pd, den_pd);
+
+WO_pd = series(W_pd, W_PLANT);
+figure('name','Bode for PD controller');
+subplot(2,1,1)
+margin(WO_pd)
+subplot(2,1,2)
+step(WO_pd,time)
+W_CL_PD = feedback(WO_pd, tf(1,1));
+figure('name', 'Bode and step response for closed loop')
+subplot(2,1,1)
+margin(W_CL_PD)
+subplot(2,1,2)
+step(W_CL_PD,time)
+
+

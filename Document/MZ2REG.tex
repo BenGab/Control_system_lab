@@ -251,5 +251,25 @@ A rendszer ugrásválasza:
 \caption(A P szabályozóra tervezett zárt kör ugrásválasza)
 \end{figure}
 A rendszer stabil, igaz vannak túllövései, de beáll 0.9-re, így látható is, hogy az állandósult az hiba $0,1$ lett.
-
+\subsection{Közelítő PD szabályozó tervezés előírt vágási frekvenciára $\omega c=0.8\frac{rad}{sec}$}
+A szabályozó  tervezéséhez az első körben a második leglassabb pólust kiejtettem.
+\[T_D=\frac{T2}{1.1}=\frac{5}{1.1}=0.4545\]
+\[T_C=0.1*T_D=0.1*0.4545=4.5455\]
+Ellenőrzésképpen a $T_D+TC=5$ ezért nem rontottam el semmit. A tervezés folyamata szerint egy előszabályozót tervezek $A_P=1$ értékkel, de az $A_P$ értéke így is $1$ akár lehetne ez is a szabályozó. Az előszabályozóval létrehozott nyitott kör átviteli függvénye:
+\[W(s)=\frac{5s+1}{36.64s^4+119.1s^3+93.12s^2+19.15s+1}\]
+Ezt követően a kiszámoltam a amplitudó és fázis értékeke a $\omega c$ vágási frekvencián. Ehhez a matlab függvényt használtam fel, ahol az amplitudó $mag=0.0653$ és a frekvencia $phase=-150.3501$. Végül az $Ap=\frac{1}{mag}=\frac{1}{0.653}=15.3064$. Végül a nyitott kör átviteli függvénye:
+\[W(s)=\frac{76.53s+15.31}{36.64s^4+119.1s^3+93.12s^2+19.15s+1}\]
+\begin{figure}[H]
+\centering
+\includegraphics[scale=.70]{WPDOPEN}
+\caption(A PD szabályozóra tervezett nyitott kör Bode digramja és ugrásválasza)
+\end{figure}
+Az ábra alapján látható, hogy a pontosan $0.8\frac{rad}{sec}$ a vágási frekvencia és az ugrásválasz alapján a rendszer stabil, ami 15 amplitudóra áll be. Hibajel nincs.
+A zárt kör:
+\begin{figure}[H]
+\centering
+\includegraphics[scale=.70]{WCLOSED_PD}
+\caption(A PD szabályozóra tervezett zárt kör Bode digramja és ugrásválasza)
+\end{figure}
+A rendszer itt is stabil, vannak túllövései, majd beáll egyre.
 \end{document}
