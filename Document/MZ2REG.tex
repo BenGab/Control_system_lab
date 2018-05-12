@@ -272,4 +272,25 @@ A zárt kör:
 \caption(A PD szabályozóra tervezett zárt kör Bode digramja és ugrásválasza)
 \end{figure}
 A rendszer itt is stabil, vannak túllövései, majd beáll egyre.
+\subsection{PI szabályozó tervezés előírt fázistartalékra $\varphi_t=70^\circ$ és nulla állandósult hibára}
+Első körben kiejtem a leglassabb pólust ami $T_I=T_1=12.4$. A PI szabályozó átviteli függvény \[W_{PI}=\frac{A_P}{T_I}*\frac{1+sT_I}{s}\]  ahol egy előszabályozót hozok létre ahol az  $\frac{A_P}{T_I}=1$. Ebből létrehoztam egy nyitott kört a tervezett rendszerre:
+\[W(s)=\frac{12.4s+1}{80.6 s^4+84.62s^3+18.7s^2+s}\]
+A nyitott körön megkerestem a vágási frekvenciát, ahol a matlab index $26$ és a frekvencia  $0.1751$. Ebből az $A_P$ érték kiszámítása:
+\[A_P=\frac{T_I}{mag[phiidx]}=0.7382\]
+Az új $A_P$ értéket felhasználva az új rendszer:
+\[W(s)=\frac{9.153s +0.7382}{999.4 s^4+1049s^3+231.9s^2+12.4s}\]
+A rendszer bode diagramja nyitott kör esetén:
+\begin{figure}[H]
+\centering
+\includegraphics[scale=.70]{WOPI}
+\caption(A PI szabályozóra tervezett nyitott kör Bode diagramja)
+\end{figure}
+A fázistartalék $\varphi_t=69.8^\circ$, ahol elértük a tervezett fázistartalékot.
+Ezek utána zárt kör ugrásválasza:
+\begin{figure}[H]
+\centering
+\includegraphics[scale=.70]{WCPI}
+\caption(A PI szabályozóra tervezett zárt kör ugrásválasza)
+\end{figure}
+A rendszer stabil, nincs túllövése és nincs hiba és 1-re beáll.
 \end{document}

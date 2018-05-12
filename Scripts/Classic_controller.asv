@@ -57,6 +57,53 @@ hold off
 
 %PD controller for cutting frequent
 wc_freq = 0.8;
-TD = T2/1.1;
-TC = 0.1*TD;
-num_p_pd 
+TD_p_pd = T2/1.1;
+TC_p_pd = 0.1*TD_p_pd;
+num_p_pd = [TD_p_pd+TC_p_pd 1];
+den_p_pd = [TC_p_pd 1];
+W_p_pd = tf(num_p_pd, den_p_pd)
+WO_p_pd = series(W_p_pd, W_PLANT)
+
+[mag, phase] = bode(WO_p_pd, wc_freq);
+Ap_p_pd = 1/mag
+
+num_pd = Ap_p_pd * num_p_pd;
+den_pd = den_p_pd;
+W_pd = tf(num_pd, den_pd);
+
+WO_pd = series(W_pd, W_PLANT);
+figure('name','Bode for PD controller');
+subplot(2,1,1)
+margin(WO_pd)
+subplot(2,1,2)
+step(WO_pd,time)
+W_CL_PD = feedback(WO_pd, tf(1,1));
+figure('name', 'Bode and step response for closed loop')
+subplot(2,1,1)
+margin(W_CL_PD)
+subplot(2,1,2)
+step(W_CL_PD,time)
+
+%PI controller for phase margin
+pm_pi = 70;
+Ti =  T1;
+num_p_pi = [Ti 1];
+den_p_pi = [1 0];
+W_p_pi = tf(num_p_pi, den_p_pi);
+
+WO_p_pi = series(W_p_pi, W_PLANT)
+
+[mag_p_pi,phase_p_pi,w_p_pi] = bode(WO_p_pi);
+phi = abs((180+phase_p_pi)-pm_pi);
+[min_value_pi, phi_index_pi] = min(phi)
+Ap_pi = Ti/mag_p_pi(phi_index_pi)
+
+num_pi = [Ap_pi*Ti Ap_pi * 1];
+den_pi = [Ti 0];
+W_pi = tf(num_pi, den_pi);
+WO_pi = series(W_pi, W_PLANT)
+figure('name', 'Bode and step response PI controller for open loop');
+margin(WO_pi);
+
+WC_PI = feedback(WO_pi, tf(1))
+
