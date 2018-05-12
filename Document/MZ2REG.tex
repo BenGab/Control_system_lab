@@ -293,4 +293,24 @@ Ezek utána zárt kör ugrásválasza:
 \caption(A PI szabályozóra tervezett zárt kör ugrásválasza)
 \end{figure}
 A rendszer stabil, nincs túllövése és nincs hiba és 1-re beáll.
+\subsection{Közelítő PID szabályozó tervezés előírt fázistartalékra $\varphi_t=70^\circ$ és nulla állandósult hibára}
+Első körben kiejtem a 2 leglassabb pólust ahol $\tau_1=12.4$ és $\tau_2=5$. Majd a $T_D$ Matlab alapján $T_D=3.30$. A $T_I$ pedig:
+\[T_I=\tau_1+\tau_2-0.1T_D=17.069\]
+Az előszabályozó $\frac{A_P}{T_I}=1$ esetén a nyitott köt átviteli függvény:
+\[W(s)=\frac{2.33}{s^3+3.798s^2+2.33s}\]
+Ebből a nyitott rendszerből megkerestem a vágási frekvenciát, ahol az $A_P=3.87$. Ezután a  $T_C=0.1*T_D=0.33$. A kiértékelések után a végleges átviteli függvényt létrehoztam a nyitott körre:
+\[W(s)=\frac{0.5282}{s^3+3.798s^2+2.33s}\]
+A ugrásválasz és a Bode diagramm:
+\begin{figure}[H]
+\centering
+\includegraphics[scale=.70]{WOPID}
+\caption(A PID szabályozóra tervezett nyitott kör bode diagramja)
+\end{figure}
+Lehet látni, hogy sikeresen elértük a fázistartalékot és 0.218 a vágási frekvencia.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=.70]{WCCP_PID}
+\caption(A PID szabályozóra tervezett zárt kör ugrásválasza)
+\end{figure}
+Lehet látni, hogy rendszer stabil, egy nagyon minimális túllövése van és utána gyorsan beáll 1-re, ahol nem látok semmi hibajelet.
 \end{document}

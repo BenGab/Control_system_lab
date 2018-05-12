@@ -109,3 +109,33 @@ WC_PI = feedback(WO_pi, tf(1,1));
 figure('name', 'Step response PI closed loop');
 step(WC_PI, time)
 
+%PID controller for phase margin
+tau1 = T1;
+tau2 = T2;
+
+Td_PID = min(roots([0.11 -1.1*(tau1+tau2) tau1*tau2])); 
+
+if Td_PID < 0
+    Td_PID = max(roots([0.11 -1.1*(tau1+tau2) tau1*tau2])); 
+end
+
+Ti_PID =  tau1+tau2-(0.1*Td_PID)
+num_p_pid = conv([tau1 1],[tau2 1]); 
+den_p_pid = [0.1*Td_PID 1 0];
+W_p_pid = tf(num_p_pid, den_p_pid);
+WO_p_pid = minreal(series(W_p_pid, W_PLANT))
+
+[mag_pid,phase_pid,w_pid] = bode(WO_p_pid);
+phi_pid = abs((180+phase_pid)-pm_pi);
+[min_value_pid, phi_index_pid] = min(phi_pid);
+Ap_pid = Ti_PID/mag_pid(phi_index_pid)
+Tc_pid = 0.1*Td_PID
+num_pid = Ap_pid/Ti_PID * conv([tau1 1],[tau2 1]); 
+den_pid = [0.1*Td_PID 1 0];
+W_PID = tf(num_pid, den_pid);
+WO_PID = minreal(series(W_PID, W_PLANT))
+figure('name', 'bode and step response for ppen loop PID')
+margin(WO_PID)
+WCCP_PID = feedback(WO_PID, tf(1,1));
+figure('name', 'step response for closed PID loop')
+step(WCCP_PID, time)
